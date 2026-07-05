@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # MongoDB Database Service
+  mongodb:
+    image: mongo:6.0
+    container_name: inventory-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - inventory-network
+    restart: always
+
+  # Spring Boot Backend Service (Bundles frontend static files)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: inventory-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/inventory_db
+      # Override this with your actual key when starting docker-compose:
+      # e.g., GROQ_API_KEY=gsk_xxx docker-compose up
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+    depends_on:
+      - mongodb
+    networks:
+      - inventory-network
+    restart: always
+
+volumes:
+  mongo_data:
+
+networks:
+  inventory-network:
+    driver: bridge

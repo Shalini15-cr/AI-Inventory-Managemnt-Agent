@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - AI Inventory Agent</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        .th-sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+        .th-sortable:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+        .sort-icon {
+            font-size: 0.8rem;
+            margin-left: 5px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <i class="bi bi-cpu-fill"></i>
+                <span>Inventory Agent</span>
+            </div>
+            <div class="list-group list-group-flush mt-3">
+                <a href="dashboard.html" class="list-group-item">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="products.html" class="list-group-item active">
+                    <i class="bi bi-box-seam"></i> Products
+                </a>
+                <a href="chat.html" class="list-group-item">
+                    <i class="bi bi-chat-left-dots"></i> AI Chat Analyst
+                </a>
+                <a href="reports.html" class="list-group-item">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </a>
+                <hr class="mx-3 my-4" style="border-color: var(--border-color);">
+                <a href="#" id="logout-btn" class="list-group-item text-danger">
+                    <i class="bi bi-box-arrow-right"></i> Sign Out
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <!-- Navbar -->
+            <nav class="top-navbar">
+                <h4 class="mb-0">Product Catalog</h4>
+                <div class="d-flex align-items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <a href="#" id="theme-toggle-btn" class="theme-toggle" title="Toggle Theme">
+                        <i id="theme-icon" class="bi bi-sun-fill"></i>
+                    </a>
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-secondary small">Welcome,</span>
+                        <strong id="username-display" class="text-primary">Admin</strong>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Content -->
+            <div class="container-fluid p-4">
+                
+                <!-- Catalog Filters Controls -->
+                <div class="glass-panel p-4 mb-4">
+                    <div class="row g-3 align-items-end">
+                        <!-- Search Box -->
+                        <div class="col-12 col-md-4">
+                            <label for="search-input" class="form-label text-secondary small">Search Inventory</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control border-start-0" id="search-input" placeholder="Search by SKU, Name, Category...">
+                            </div>
+                        </div>
+
+                        <!-- Category Selector -->
+                        <div class="col-12 col-md-3">
+                            <label for="category-filter" class="form-label text-secondary small">Category</label>
+                            <select class="form-select" id="category-filter">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+
+                        <!-- Status Selector -->
+                        <div class="col-12 col-md-3">
+                            <label for="status-filter" class="form-label text-secondary small">Stock Status</label>
+                            <select class="form-select" id="status-filter">
+                                <option value="all">All Statuses</option>
+                                <option value="healthy">Healthy Stock</option>
+                                <option value="low_stock">Low Stock Warning</option>
+                                <option value="out_of_stock">Out of Stock</option>
+                            </select>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="col-12 col-md-2 text-md-end">
+                            <div class="d-flex gap-2 justify-content-md-end">
+                                <button id="seed-btn" class="btn btn-outline-secondary w-50" title="Load Sample Products">
+                                    <i class="bi bi-database-fill-down"></i> Seeding
+                                </button>
+                                <a href="add-product.html" class="btn btn-indigo w-50 text-white" style="background-color: var(--accent-primary); border: none; border-radius: 8px;">
+                                    <i class="bi bi-plus-lg"></i> Add
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="glass-panel p-4 mb-4">
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th class="th-sortable" data-sort="productName">Product Name <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                    <th class="th-sortable" data-sort="sku">SKU <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                    <th class="th-sortable" data-sort="category">Category <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                    <th class="th-sortable" data-sort="quantity">Quantity <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                    <th class="th-sortable" data-sort="minimumStock">Min Stock <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                    <th class="th-sortable" data-sort="price">Price <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                                    <th>Warehouse</th>
+                                    <th>Status</th>
+                                    <th>Supplier</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr>
+                                    <td colspan="10" class="text-center text-muted py-5">
+                                        <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                        Retrieving inventory records...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div id="pagination-info" class="text-secondary small">
+                        Showing 0 to 0 of 0 entries
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul id="pagination-list" class="pagination mb-0">
+                            <!-- JS populated pages -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Theme/Session App JS -->
+    <script src="js/app.js"></script>
+
+    <script>
+        // Pagination & Search States
+        let currentPage = 0;
+        let pageSize = 10;
+        let currentSort = 'productName';
+        let currentDir = 'asc';
+        
+        // References
+        const searchInput = document.getElementById('search-input');
+        const categoryFilter = document.getElementById('category-filter');
+        const statusFilter = document.getElementById('status-filter');
+        const tableBody = document.getElementById('products-table-body');
+        const paginationList = document.getElementById('pagination-list');
+        const paginationInfo = document.getElementById('pagination-info');
+
+        // Dynamic categories listing
+        async function fetchCategories() {
+            try {
+                // Fetch stats to get categories list
+                const response = await fetch('/api/dashboard');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.categoryDistribution) {
+                        const select = document.getElementById('category-filter');
+                        select.innerHTML = '<option value="all">All Categories</option>';
+                        Object.keys(data.categoryDistribution).forEach(cat => {
+                            const opt = document.createElement('option');
+                            opt.value = cat;
+                            opt.textContent = cat;
+                            select.appendChild(opt);
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to pre-populate categories:', err);
+            }
+        }
+
+        // Fetch paginated products matching current state
+        async function fetchProducts() {
+            const searchValue = searchInput.value.trim();
+            const categoryValue = categoryFilter.value;
+            const statusValue = statusFilter.value;
+
+            // Construct API url query string
+            let url = `/api/products?page=${currentPage}&size=${pageSize}&sortBy=${currentSort}&direction=${currentDir}`;
+            if (searchValue) url += `&search=${encodeURIComponent(searchValue)}`;
+            if (categoryValue !== 'all') url += `&category=${encodeURIComponent(categoryValue)}`;
+            if (statusValue !== 'all') url += `&status=${encodeURIComponent(statusValue)}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    if (response.status === 401) return;
+                    showToast('Failed to retrieve products list', 'danger');
+                    return;
+                }
+
+                const data = await response.json();
+                renderTable(data.content);
+                renderPagination(data);
+            } catch (err) {
+                console.error('Error fetching products:', err);
+                showToast('API connection error', 'danger');
+            }
+        }
+
+        // Render table records
+        function renderTable(products) {
+            tableBody.innerHTML = '';
+
+            if (!products || products.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="text-center text-secondary py-5">
+                            <i class="bi bi-inbox-fill display-6 d-block mb-3"></i>
+                            No products matching criteria found in inventory.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            products.forEach(p => {
+                const tr = document.createElement('tr');
+                
+                // Status mapping
+                let statusBadge = '';
+                if (p.status === 'HEALTHY') statusBadge = '<span class="status-badge healthy">Healthy</span>';
+                else if (p.status === 'LOW_STOCK') statusBadge = '<span class="status-badge low">Low Stock</span>';
+                else if (p.status === 'OUT_OF_STOCK') statusBadge = '<span class="status-badge out">Out of Stock</span>';
+
+                tr.innerHTML = `
+                    <td><strong>${p.productName}</strong></td>
+                    <td class="font-monospace text-secondary">${p.sku}</td>
+                    <td><span class="badge bg-secondary-subtle text-secondary-emphasis">${p.category}</span></td>
+                    <td class="fw-bold">${p.quantity}</td>
+                    <td class="text-secondary">${p.minimumStock}</td>
+                    <td class="text-primary fw-semibold">${formatCurrency(p.price)}</td>
+                    <td class="small">${p.warehouseLocation || 'N/A'}</td>
+                    <td>${statusBadge}</td>
+                    <td class="small text-secondary">${p.supplier}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="edit-product.html?id=${p.id}" class="btn btn-sm btn-outline-light" title="Edit Product">
+                                <i class="bi bi-pencil-square text-primary"></i>
+                            </a>
+                            <button onclick="deleteProduct('${p.id}', '${p.productName}')" class="btn btn-sm btn-outline-light" title="Delete Product">
+                                <i class="bi bi-trash-fill text-danger"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Render Pagination numbers
+        function renderPagination(pageData) {
+            paginationList.innerHTML = '';
+            
+            const totalPages = pageData.totalPages;
+            const totalElements = pageData.totalElements;
+            const startElement = pageData.numberOfElements > 0 ? (currentPage * pageSize) + 1 : 0;
+            const endElement = (currentPage * pageSize) + pageData.numberOfElements;
+
+            paginationInfo.textContent = `Showing ${startElement} to ${endElement} of ${totalElements} entries`;
+
+            if (totalPages <= 1) return; // No pagination controls needed
+
+            // Previous Button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 0 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(event, ${currentPage - 1})"><i class="bi bi-chevron-left"></i></a>`;
+            paginationList.appendChild(prevLi);
+
+            // Page numbers
+            for (let i = 0; i < totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${currentPage === i ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="changePage(event, ${i})">${i + 1}</a>`;
+                paginationList.appendChild(li);
+            }
+
+            // Next Button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(event, ${currentPage + 1})"><i class="bi bi-chevron-right"></i></a>`;
+            paginationList.appendChild(nextLi);
+        }
+
+        function changePage(e, page) {
+            e.preventDefault();
+            currentPage = page;
+            fetchProducts();
+        }
+
+        // Delete trigger handler
+        async function deleteProduct(id, name) {
+            if (confirm(`Are you sure you want to delete '${name}' from inventory?`)) {
+                try {
+                    const response = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        showToast('Product deleted successfully', 'success');
+                        fetchProducts();
+                        fetchCategories(); // category list might have changed
+                    } else {
+                        showToast('Delete operation failed', 'danger');
+                    }
+                } catch (err) {
+                    console.error('Delete error:', err);
+                    showToast('Connection failed', 'danger');
+                }
+            }
+        }
+
+        // Seed data handler
+        document.getElementById('seed-btn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/products/import-sample', { method: 'POST' });
+                if (response.ok) {
+                    showToast('Sample products loaded successfully!', 'success');
+                    currentPage = 0;
+                    fetchProducts();
+                    fetchCategories();
+                } else {
+                    showToast('Database seeding failed', 'danger');
+                }
+            } catch (err) {
+                console.error('Seed error:', err);
+                showToast('Failed to connect to seeder endpoint', 'danger');
+            }
+        });
+
+        // Search & filter listeners
+        let typingTimer;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                currentPage = 0;
+                fetchProducts();
+            }, 400); // Debouncing search
+        });
+
+        categoryFilter.addEventListener('change', () => {
+            currentPage = 0;
+            fetchProducts();
+        });
+
+        statusFilter.addEventListener('change', () => {
+            currentPage = 0;
+            fetchProducts();
+        });
+
+        // Header sorting bind
+        document.querySelectorAll('.th-sortable').forEach(th => {
+            th.addEventListener('click', () => {
+                const sortField = th.getAttribute('data-sort');
+                
+                // Toggle sorting direction
+                if (currentSort === sortField) {
+                    currentDir = currentDir === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort = sortField;
+                    currentDir = 'asc';
+                }
+
+                // Reset icons
+                document.querySelectorAll('.th-sortable .sort-icon').forEach(icon => {
+                    icon.className = 'bi bi-arrow-down-up sort-icon';
+                });
+
+                // Set active sorting icon
+                const icon = th.querySelector('.sort-icon');
+                if (currentDir === 'asc') {
+                    icon.className = 'bi bi-sort-up sort-icon';
+                } else {
+                    icon.className = 'bi bi-sort-down sort-icon';
+                }
+
+                currentPage = 0;
+                fetchProducts();
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial load
+            setTimeout(() => {
+                fetchCategories();
+                fetchProducts();
+            }, 300);
+        });
+    </script>
+</body>
+</html>

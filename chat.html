@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analyst Chat - AI Inventory Agent</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+    <!-- Marked Markdown Parser library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <i class="bi bi-cpu-fill"></i>
+                <span>Inventory Agent</span>
+            </div>
+            <div class="list-group list-group-flush mt-3">
+                <a href="dashboard.html" class="list-group-item">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="products.html" class="list-group-item">
+                    <i class="bi bi-box-seam"></i> Products
+                </a>
+                <a href="chat.html" class="list-group-item active">
+                    <i class="bi bi-chat-left-dots"></i> AI Chat Analyst
+                </a>
+                <a href="reports.html" class="list-group-item">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </a>
+                <hr class="mx-3 my-4" style="border-color: var(--border-color);">
+                <a href="#" id="logout-btn" class="list-group-item text-danger">
+                    <i class="bi bi-box-arrow-right"></i> Sign Out
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" class="d-flex flex-column h-100">
+            <!-- Navbar -->
+            <nav class="top-navbar">
+                <h4 class="mb-0">AI Inventory Analyst</h4>
+                <div class="d-flex align-items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <a href="#" id="theme-toggle-btn" class="theme-toggle" title="Toggle Theme">
+                        <i id="theme-icon" class="bi bi-sun-fill"></i>
+                    </a>
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-secondary small">Welcome,</span>
+                        <strong id="username-display" class="text-primary">Admin</strong>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Chat Main Container -->
+            <div class="container-fluid flex-grow-1 p-4 d-flex flex-column justify-content-between" style="height: calc(100vh - 75px);">
+                <!-- Messages Box -->
+                <div class="glass-panel flex-grow-1 mb-3 d-flex flex-column overflow-hidden" style="height: 0;">
+                    <!-- Message Body -->
+                    <div id="chat-messages" class="flex-grow-1">
+                        <!-- Welcome message -->
+                        <div class="chat-bubble assistant">
+                            <h6 class="text-primary"><i class="bi bi-robot me-2"></i> Inventory AI Analyst</h6>
+                            <p class="mb-0">Hello! I am your AI Inventory Analyst. I inspect active stock logs, calculate warning risks, recommend order quantities, and detail supplier follow-ups. </p>
+                            <p class="mt-2 mb-0 text-secondary small">Try asking me one of the quick prompts below or write your own question!</p>
+                        </div>
+                    </div>
+
+                    <!-- Typing indicator placeholder (hidden by default) -->
+                    <div id="typing-indicator-bubble" class="chat-bubble assistant d-none mb-3 mx-3 align-self-start">
+                        <h6 class="text-primary"><i class="bi bi-robot me-2"></i> Inventory AI Analyst</h6>
+                        <div class="typing-indicator">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Footer Area -->
+                <div class="w-100">
+                    <!-- Quick Suggestions Chips -->
+                    <div class="mb-3 d-flex flex-wrap gap-2">
+                        <span class="quick-chip" onclick="sendQuickPrompt('Summarize inventory health')">
+                            <i class="bi bi-activity text-success"></i> Health Summary
+                        </span>
+                        <span class="quick-chip" onclick="sendQuickPrompt('Which products require immediate reorder?')">
+                            <i class="bi bi-arrow-repeat text-warning"></i> Reorder Candidates
+                        </span>
+                        <span class="quick-chip" onclick="sendQuickPrompt('Explain inventory risks')">
+                            <i class="bi bi-exclamation-triangle-fill text-danger"></i> Inventory Risks
+                        </span>
+                        <span class="quick-chip" onclick="sendQuickPrompt('Which supplier should be contacted?')">
+                            <i class="bi bi-envelope text-primary"></i> Supplier Directory
+                        </span>
+                        <span class="quick-chip" onclick="sendQuickPrompt('Recommend reorder quantities')">
+                            <i class="bi bi-calculator text-info"></i> Quantity Recommendations
+                        </span>
+                    </div>
+
+                    <!-- Chat Box Form -->
+                    <form id="chat-form" class="d-flex gap-2">
+                        <input type="text" id="chat-input" class="form-control flex-grow-1" placeholder="Ask the AI Analyst about stocks, reorders, or supply chains..." autocomplete="off" required>
+                        <button type="submit" class="btn btn-indigo px-4 text-white" style="background-color: var(--accent-primary); border: none; border-radius: 8px;">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Theme/Session App JS -->
+    <script src="js/app.js"></script>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing-indicator-bubble');
+
+        // Scroll to the bottom of the message container
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Add message bubble to screen
+        function appendMessage(sender, text) {
+            const isUser = sender === 'user';
+            
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex';
+            wrapper.style.flexDirection = 'column';
+            wrapper.style.width = '100%';
+
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${isUser ? 'user' : 'assistant'}`;
+
+            if (isUser) {
+                bubble.innerHTML = `<strong>You</strong><br>${escapeHTML(text)}`;
+            } else {
+                // Parse markdown to HTML using marked.js
+                const parsedText = marked.parse(text);
+                bubble.innerHTML = `<h6 class="text-primary"><i class="bi bi-robot me-2"></i> Inventory AI Analyst</h6>${parsedText}`;
+            }
+
+            wrapper.appendChild(bubble);
+            chatMessages.appendChild(wrapper);
+            scrollToBottom();
+        }
+
+        // Escape helper for plain user text
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Send question to backend API
+        async function askAI(question) {
+            // Append User message
+            appendMessage('user', question);
+
+            // Show Typing indicator
+            typingIndicator.classList.remove('d-none');
+            scrollToBottom();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: question })
+                });
+
+                // Hide typing indicator
+                typingIndicator.classList.add('d-none');
+
+                if (!response.ok) {
+                    if (response.status === 401) return;
+                    appendMessage('assistant', '⚠️ Error: Failed to contact the backend service. Please check server logs.');
+                    return;
+                }
+
+                const data = await response.json();
+                appendMessage('assistant', data.response);
+
+            } catch (error) {
+                // Hide typing indicator
+                typingIndicator.classList.add('d-none');
+                console.error('Chat error:', error);
+                appendMessage('assistant', '⚠️ Communication failure. Please verify the Spring Boot server is active.');
+            }
+        }
+
+        // Quick suggestions triggers
+        function sendQuickPrompt(promptText) {
+            askAI(promptText);
+        }
+
+        // Form submit binding
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const question = chatInput.value.trim();
+            if (!question) return;
+
+            chatInput.value = '';
+            askAI(question);
+        });
+
+        // Focus text box on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                chatInput.focus();
+            }, 300);
+        });
+    </script>
+</body>
+</html>
