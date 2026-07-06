@@ -1,0 +1,92 @@
+2026-07-04T01:00:08.698Z [INFO] ----------------------invoke appmod-report-event----------------------
+2026-07-04T01:00:08.699Z [INFO] [Tool.invoke]({name: appmod-report-event, modelId: auto, input: {
+  "projectPath": "c:\\Users\\shalini c.r\\OneDrive\\Desktop\\Inventory Management Agent",
+  "event": "precheckCompleted",
+  "phase": "precheck",
+  "status": "succeeded",
+  "details": {
+    "components": [
+      {
+        "name": "jdk",
+        "baseVersion": "21",
+        "targetVersion": "25"
+      }
+    ]
+  }
+}}).
+2026-07-04T01:00:08.699Z [INFO] [Tool.invoke] do invoke.
+2026-07-04T01:00:08.700Z [INFO] Project c:\Users\shalini c.r\OneDrive\Desktop\Inventory Management Agent is not a maven project, try to get java version from gradle
+2026-07-04T01:00:08.706Z [INFO] [Tool.invoke]({result: {
+  "message": "Event 'precheckCompleted' reported!\nSession ID: 20260704010008,\nSession Dir: c:\\Users\\shalini c.r\\OneDrive\\Desktop\\Inventory Management Agent\\.github\\modernize\\java-upgrade\\20260704010008"
+}}).
+2026-07-04T01:00:08.706Z [INFO] ----------------------invoked appmod-report-event----------------------
+2026-07-04T01:00:08.728Z [INFO] Try to get java version from gradle config files: 
+2026-07-04T01:00:08.729Z [INFO] Try to get java version from gradle properties: undefined
+2026-07-04T01:00:08.729Z [INFO] Project java version: 8
+2026-07-04T01:00:08.749Z [WARN] [ReportEventTool] Full project info unavailable, attempting lightweight fallback: UserError: Failed to detect build tool for the project at c:\Users\shalini c.r\OneDrive\Desktop\Inventory Management Agent. There are child Maven/Gradle projects detected: "backend". Would you like to use one of them instead?
+2026-07-04T01:00:08.751Z [INFO] Project c:\Users\shalini c.r\OneDrive\Desktop\Inventory Management Agent is not a maven project, try to get java version from gradle
+2026-07-04T01:00:08.761Z [INFO] Try to get java version from gradle config files: 
+2026-07-04T01:00:08.761Z [INFO] Try to get java version from gradle properties: undefined
+2026-07-04T01:00:08.793Z [INFO] ----------------------invoke appmod-list-jdks----------------------
+2026-07-04T01:00:08.793Z [INFO] [Tool.invoke]({name: appmod-list-jdks, modelId: auto, input: {
+  "projectPath": "c:\\Users\\shalini c.r\\OneDrive\\Desktop\\Inventory Management Agent"
+}}).
+2026-07-04T01:00:08.793Z [INFO] [Tool.invoke] do invoke.
+2026-07-04T01:00:08.822Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following jdks in your system:\n\n1. Java 23.0.2\n   📁 Path: C:\\Program Files\\Java\\jdk-23\\bin\n   🏷️ Source: others\n\nTotal: 1 JDK installation(s) found"
+}}).
+2026-07-04T01:00:08.822Z [INFO] ----------------------invoked appmod-list-jdks----------------------
+2026-07-04T01:00:08.836Z [INFO] ---------------------prepare appmod-list-mavens----------------------
+2026-07-04T01:00:08.837Z [INFO] [Tool.prepareInvocation]({name: appmod-list-mavens, input: {}}).
+2026-07-04T01:00:08.837Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-07-04T01:00:08.837Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List mavens"
+}}).
+2026-07-04T01:00:08.838Z [INFO] ----------------------prepared appmod-list-mavens----------------------
+2026-07-04T01:00:08.901Z [INFO] ----------------------invoke appmod-list-mavens----------------------
+2026-07-04T01:00:08.901Z [INFO] [Tool.invoke]({name: appmod-list-mavens, modelId: auto, input: {
+  "projectPath": "c:\\Users\\shalini c.r\\OneDrive\\Desktop\\Inventory Management Agent"
+}}).
+2026-07-04T01:00:08.902Z [INFO] [Tool.invoke] do invoke.
+2026-07-04T01:00:08.907Z [INFO] [Tool.invoke]({result: {
+  "message": "No Maven installations found."
+}}).
+2026-07-04T01:00:08.907Z [INFO] ----------------------invoked appmod-list-mavens----------------------
+2026-07-04T01:01:23.061Z [INFO] ---------------------prepare appmod-install-jdk----------------------
+2026-07-04T01:01:23.062Z [INFO] [Tool.prepareInvocation]({name: appmod-install-jdk, input: {
+  "version": "25",
+  "dest": "C:\\Program Files\\Java"
+}}).
+2026-07-04T01:01:23.062Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-07-04T01:01:26.067Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Download and install JDK"
+}}).
+2026-07-04T01:01:26.069Z [INFO] ----------------------prepared appmod-install-jdk----------------------
+2026-07-04T01:01:26.111Z [INFO] ----------------------invoke appmod-install-jdk----------------------
+2026-07-04T01:01:26.112Z [INFO] [Tool.invoke]({name: appmod-install-jdk, modelId: auto, input: {
+  "version": "25",
+  "dest": "C:\\Program Files\\Java",
+  "projectPath": "c:\\Users\\shalini c.r\\OneDrive\\Desktop\\Inventory Management Agent"
+}}).
+2026-07-04T01:01:26.112Z [INFO] [Tool.invoke] do invoke.
+2026-07-04T01:01:26.588Z [ERROR] [Tool.invoke] error occurs when invoking tool appmod-install-jdk: Error: EPERM: operation not permitted, mkdir 'C:\Program Files\Java\jdk-25.0.2'.
+2026-07-04T01:01:26.589Z [INFO] ----------------------invoked appmod-install-jdk----------------------
+2026-07-04T01:01:51.506Z [INFO] ---------------------prepare appmod-install-jdk----------------------
+2026-07-04T01:01:51.507Z [INFO] [Tool.prepareInvocation]({name: appmod-install-jdk, input: {
+  "version": "25",
+  "dest": "C:\\Users\\shalini c.r\\.jdk"
+}}).
+2026-07-04T01:01:51.507Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-07-04T01:01:53.422Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Download and install JDK"
+}}).
+2026-07-04T01:01:53.422Z [INFO] ----------------------prepared appmod-install-jdk----------------------
+2026-07-04T01:01:53.463Z [INFO] ----------------------invoke appmod-install-jdk----------------------
+2026-07-04T01:01:53.464Z [INFO] [Tool.invoke]({name: appmod-install-jdk, modelId: auto, input: {
+  "version": "25",
+  "dest": "C:\\Users\\shalini c.r\\.jdk",
+  "projectPath": "c:\\Users\\shalini c.r\\OneDrive\\Desktop\\Inventory Management Agent"
+}}).
+2026-07-04T01:01:53.464Z [INFO] [Tool.invoke] do invoke.
+2026-07-04T01:29:37.961Z [ERROR] [Tool.invoke] error occurs when invoking tool appmod-install-jdk: TypeError: terminated.
+2026-07-04T01:29:37.963Z [INFO] ----------------------invoked appmod-install-jdk----------------------
